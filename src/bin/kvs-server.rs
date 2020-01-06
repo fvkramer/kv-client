@@ -9,9 +9,12 @@ use std::net::{TcpListener, TcpStream};
 
 const DEFAULT_ADDR: u16 = 4000;
 
-fn handle_client(mut stream: TcpStream) {
-    // Read all the headers
-    stream.read(&mut [0; 128]);
+fn handle_client(mut stream: TcpStream) -> Result<()> {
+    let mut buffer = String::new();
+    stream.read_to_string(&mut buffer)?;
+    println!("request: {}", buffer);
+
+    Ok(())
 }
 
 fn main() -> Result<()> {
