@@ -29,7 +29,8 @@ fn run_command_prompt() -> Result<()> {
         print!("> ");
         io::stdout().flush();
 
-        let term_input = io::stdin().read_line(&mut input);
+        io::stdin().read_line(&mut input)?;
+        println!("{}", input.trim());
     }
 
     Ok(())
