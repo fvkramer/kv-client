@@ -30,8 +30,12 @@ fn run_command_prompt() -> Result<()> {
         io::stdout().flush();
 
         io::stdin().read_line(&mut input)?;
-        println!("{}", input.trim());
+        handle_client_input(input.trim());
     }
 
     Ok(())
+}
+
+fn handle_client_input(input: &str) {
+    println!("{}", input);
 }
