@@ -6,13 +6,23 @@ use std::fs::OpenOptions;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::net::{TcpListener, TcpStream};
+use std::str::from_utf8;
 
 const DEFAULT_ADDR: u16 = 4000;
 
 fn handle_client(mut stream: TcpStream) -> Result<()> {
-    let mut buffer = String::new();
-    stream.read_to_string(&mut buffer)?;
-    println!("request: {}", buffer);
+    let mut buf = [0 as u8; 128];
+    while match stream.read(&mut buf) {
+        Ok(_size) => {
+            println!("message: {}", from_utf8(&buf).unwrap());
+            buf = [0; 128];
+            true
+        }
+        Err(_) => {
+            println!("failed");
+            false
+        }
+    } {}
 
     Ok(())
 }
