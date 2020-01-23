@@ -8,13 +8,11 @@ fn main() -> Result<()> {
     let addr = SocketAddr::V4(SocketAddrV4::new(Ipv4Addr::new(127, 0, 0, 1), 4000));
     Command::new("clear").spawn()?.wait();
 
-    run_command_prompt();
     if let Ok(mut stream) = TcpStream::connect(&addr) {
         println!("local addr: {}", stream.local_addr()?);
         println!("remote addr: {}", stream.peer_addr()?);
 
-        let msg = b"write initiated";
-        stream.write(&msg[..]);
+        run_command_prompt(&mut stream);
     } else {
         println!("Couldn't connect to server...");
     }
@@ -22,7 +20,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn run_command_prompt() -> Result<()> {
+fn run_command_prompt(stream: &mut TcpStream) -> Result<()> {
     let mut input = String::new();
 
     loop {
@@ -30,12 +28,12 @@ fn run_command_prompt() -> Result<()> {
         io::stdout().flush();
 
         io::stdin().read_line(&mut input)?;
-        handle_client_input(input.trim());
+        transmit_client_input(stream, input.trim());
     }
 
     Ok(())
 }
 
-fn handle_client_input(input: &str) {
-    println!("{}", input);
+fn transmit_client_input(stream: &mut TcpStream, input: &str) -> Result<usize> {
+    stream.write(input.as_bytes())
 }
