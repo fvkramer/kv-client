@@ -1,6 +1,6 @@
 use std::io::prelude::*;
 use std::io::{self, Result};
-use std::net::{Ipv4Addr, SocketAddr, SocketAddrV4, TcpStream};
+use std::net::{Ipv4Addr, Shutdown, SocketAddr, SocketAddrV4, TcpStream};
 use std::process::Command;
 use std::time::Duration;
 
@@ -29,7 +29,6 @@ fn run_command_prompt(stream: &mut TcpStream) -> Result<()> {
         io::stdin().read_line(&mut input)?;
         transmit_client_input(stream, input.trim());
     }
-
     Ok(())
 }
 
