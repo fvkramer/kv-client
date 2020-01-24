@@ -21,9 +21,8 @@ fn main() -> Result<()> {
 }
 
 fn run_command_prompt(stream: &mut TcpStream) -> Result<()> {
-    let mut input = String::new();
-
     loop {
+        let mut input = String::new();
         print!("> ");
         io::stdout().flush();
 
